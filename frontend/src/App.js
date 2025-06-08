@@ -15,7 +15,8 @@ import {
   Brain,
   BarChart3,
   Cpu,
-  Globe
+  Globe,
+  Download
 } from 'lucide-react';
 
 function App() {
