@@ -340,7 +340,7 @@ function App() {
             <p className="text-xl mb-8 max-w-2xl mx-auto">
               À la recherche d'opportunités dans l'analyse de données, l'intelligence artificielle ou le développement
             </p>
-            <div className="flex flex-wrap justify-center gap-6">
+            <div className="flex flex-wrap justify-center gap-6 mb-8">
               <a href="mailto:redawafik0@gmail.com" className="flex items-center gap-2 px-8 py-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors font-semibold">
                 <Mail className="w-5 h-5" />
                 redawafik0@gmail.com
@@ -349,6 +349,36 @@ function App() {
                 <Phone className="w-5 h-5" />
                 +212 699-566323
               </a>
+            </div>
+            
+            {/* CV Download Section */}
+            <div className="mt-12 pt-8 border-t border-white/20">
+              <h3 className="text-2xl font-bold mb-4">Télécharger mon CV</h3>
+              <a 
+                href="/cv-reda-wafik.pdf" 
+                download="CV-REDA-WAFIK.pdf"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                onClick={(e) => {
+                  // Check if file exists, if not show a friendly message
+                  fetch('/cv-reda-wafik.pdf')
+                    .then(response => {
+                      if (!response.ok) {
+                        e.preventDefault();
+                        alert('CV file not found. Please add "cv-reda-wafik.pdf" to the public folder.');
+                      }
+                    })
+                    .catch(() => {
+                      e.preventDefault();
+                      alert('CV file not found. Please add "cv-reda-wafik.pdf" to the public folder.');
+                    });
+                }}
+              >
+                <Download className="w-6 h-6" />
+                Télécharger CV (PDF)
+              </a>
+              <p className="text-sm mt-3 text-white/80">
+                Cliquez pour télécharger mon curriculum vitae complet
+              </p>
             </div>
           </div>
         </section>
