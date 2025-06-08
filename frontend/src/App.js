@@ -127,6 +127,29 @@ function App() {
             }}
           />
           <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Profile Photo */}
+            <div className="mb-8">
+              <div className="w-40 h-40 mx-auto rounded-full overflow-hidden border-4 border-white dark:border-gray-700 shadow-xl bg-gray-200 dark:bg-gray-600">
+                <img 
+                  src="/profile-photo.jpg" 
+                  alt="REDA WAFIK" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500" style={{display: 'none'}}>
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <span className="text-2xl font-bold text-blue-600">RW</span>
+                    </div>
+                    <p className="text-sm">Add photo here</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               REDA WAFIK
             </h1>
