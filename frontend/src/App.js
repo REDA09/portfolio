@@ -3,7 +3,7 @@ import './App.css';
 import {
   Activity, Award, BrainCircuit, BriefcaseBusiness, CalendarDays, ChevronRight,
   Cpu, Database, Download, ExternalLink, FileText, Github, GraduationCap,
-  Layers, Linkedin, Mail, Menu, Moon, Sun, Terminal, Workflow, X, Zap
+  Layers, Linkedin, Mail, Menu, Moon, Phone, Sun, Terminal, Workflow, X, Zap
 } from 'lucide-react';
 
 const data = {
@@ -235,6 +235,8 @@ function App() {
   const [menu, setMenu] = useState(false);
   const [doc, setDoc] = useState(null);
   const [openProject, setOpenProject] = useState(0);
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [formStatus, setFormStatus] = useState('');
   const t = data[lang];
   const heroRef = useRef(null);
 
@@ -254,6 +256,18 @@ function App() {
 
   const open = (file, title) => setDoc({ file, title, download: t.download });
   const ids = ['profile', 'experience', 'projects', 'skills', 'credentials'];
+  const sendMessage = async event => {
+    event.preventDefault();
+    const service = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_8t33o08';
+    const template = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_732imsn';
+    const key = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || 'qzrpmGOiFdFwNyOuf';
+    setFormStatus(lang === 'fr' ? 'Envoi en cours…' : 'Sending…');
+    try {
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ service_id: service, template_id: template, user_id: key, template_params: { name: form.name, email: form.email, time: new Date().toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB'), message: form.message, reply_to: form.email } }) });
+      if (!response.ok) throw new Error('EmailJS error');
+      setForm({ name: '', email: '', message: '' }); setFormStatus(lang === 'fr' ? 'Message envoyé. Merci !' : 'Message sent. Thank you!');
+    } catch { setFormStatus(lang === 'fr' ? 'Impossible d’envoyer le message. Essayez à nouveau ou contactez-moi par email.' : 'Unable to send the message. Please try again or email me directly.'); }
+  };
 
   return (
     <>
@@ -423,7 +437,19 @@ function App() {
               <p className="tag">{t.contactTag}</p>
               <h2>{t.contactTitle}</h2>
               <p>{t.contactText}</p>
-              <a href="mailto:redawafik0@gmail.com">redawafik0@gmail.com <ChevronRight /></a>
+              <div className="contact-layout">
+                <div className="contact-direct">
+                  <a href="mailto:redawafik0@gmail.com">redawafik0@gmail.com <ChevronRight /></a>
+                  <a className="phone-link" href="tel:+212699566323"><Phone />+212 699 566 323</a>
+                </div>
+                <form className="contact-form" onSubmit={sendMessage}>
+                  <label>{lang === 'fr' ? 'Votre nom' : 'Your name'}<input required name="name" autoComplete="name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /></label>
+                  <label>{lang === 'fr' ? 'Votre email' : 'Your email'}<input required type="email" name="email" autoComplete="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /></label>
+                  <label>{lang === 'fr' ? 'Votre message' : 'Your message'}<textarea required name="message" rows="4" value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} /></label>
+                  <button className="btn btn-primary" type="submit"><Mail />{lang === 'fr' ? 'Envoyer le message' : 'Send message'}</button>
+                  {formStatus && <p className="form-status" aria-live="polite">{formStatus}</p>}
+                </form>
+              </div>
             </div>
           </Reveal>
         </main>
